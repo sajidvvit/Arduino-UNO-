@@ -1,0 +1,15 @@
+#include <LiquidCrystal.h>
+
+// Initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(2,3,4,9,10,11,12);
+
+void setup() {
+  // Set up the LCD's number of columns and rows:
+  lcd.begin(16, 2); // 16 columns and 2 rows
+  // Print a message to the LCD.
+  lcd.print("MD SAJID ALAM");
+}
+
+void loop() {
+  // Do nothing here... we are just displaying a message in setup
+}
