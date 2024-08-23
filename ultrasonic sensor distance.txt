@@ -1,0 +1,57 @@
+#include <LiquidCrystal.h> // Include the LiquidCrystal library
+
+// Initialize the LCD with the pins (rs, enable, d4, d5, d6, d7)
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7); 
+
+// Define pins for the ultrasonic sensor
+const int trigPin = 9;
+const int echoPin = 10;
+
+// Variables to store duration and distances
+long duration;
+int distanceCm, distanceInch;
+
+void setup() {
+  // Initialize the LCD with 16 columns and 2 rows
+  lcd.begin(16, 2);
+
+  // Set up the trigPin as an OUTPUT and echoPin as an INPUT
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  // Clear the trigger pin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Send a 10-microsecond pulse to trigger pin
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the echo pin and calculate the time it takes for the pulse to return
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate the distance in centimeters
+  distanceCm = duration * 0.034 / 2;
+
+  // Calculate the distance in inches
+  distanceInch = duration * 0.0133 / 2;
+
+  // Display the distance in centimeters on the LCD
+  lcd.setCursor(0, 0); // Set the cursor to the first row
+  lcd.print("Distance: "); 
+  lcd.print(distanceCm); 
+  lcd.print(" cm  "); // Added extra spaces to clear previous longer text
+
+  // Display the distance in inches on the LCD
+  lcd.setCursor(0, 1); // Set the cursor to the second row
+  lcd.print("Distance: "); 
+  lcd.print(distanceInch);
+  lcd.print(" inch");
+
+  // Add a delay before the next loop
+  delay(500); // Changed to 500 ms for better visibility and sensor stability
+}
+give me project Abstract And keyword,Hardware component
