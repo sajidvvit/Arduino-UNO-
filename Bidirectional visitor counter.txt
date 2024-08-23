@@ -1,0 +1,68 @@
+v#include <LiquidCrystal.h> // Include the LiquidCrystal library
+
+// Initialize the LCD with the pins (rs, enable, d4, d5, d6, d7)
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
+
+// Define pin numbers for sensors and relay
+#define in 8
+#define out 9
+#define relay 10
+
+int count = 0; // Initialize the count of people in the room
+
+void IN() {
+  count++;
+  lcd.clear();
+  lcd.print("Person In Room:");
+  lcd.setCursor(0, 1);
+  lcd.print(count);
+  delay(1000); // Display updated count for 1 second
+}
+
+void OUT() {
+  if (count > 0) { // Prevent count from going negative
+    count--;
+    lcd.clear();
+    lcd.print("Person In Room:");
+    lcd.setCursor(0, 1);
+    lcd.print(count);
+    delay(1000); // Display updated count for 1 second
+  }
+}
+
+void setup() {
+  lcd.begin(16, 2); // Initialize the LCD with 16 columns and 2 rows
+  lcd.print("Visitor Counter");
+  delay(2000); // Display initial message for 2 seconds
+
+  pinMode(in, INPUT);   // Set the 'in' pin as an input
+  pinMode(out, INPUT);  // Set the 'out' pin as an input
+  pinMode(relay, OUTPUT); // Set the relay pin as an output
+
+  lcd.clear(); // Clear the LCD for the next display
+  lcd.print("Person In Room:");
+  lcd.setCursor(0, 1);
+  lcd.print(count);
+}
+
+void loop() {
+  if (digitalRead(in) == HIGH) { // Check if 'in' sensor is triggered
+    IN();
+  }
+  if (digitalRead(out) == HIGH) { // Check if 'out' sensor is triggered
+    OUT();
+  }
+
+  if (count <= 0) { // If no one is in the room
+    digitalWrite(relay, LOW); // Turn off the relay (light)
+    lcd.clear();
+    lcd.print("Nobody In Room");
+    lcd.setCursor(0, 1);
+    lcd.print("Light Is Off");
+    delay(200); // Short delay to avoid rapid updates
+  } else {
+    digitalWrite(relay, HIGH); // Turn on the relay (light) if people are present
+  }
+
+  delay(100); // Small delay to debounce input readings
+}
